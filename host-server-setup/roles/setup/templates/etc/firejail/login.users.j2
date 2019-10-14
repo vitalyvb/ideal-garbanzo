@@ -1,0 +1,21 @@
+# /etc/firejail/login.users - restricted user shell configuration
+
+{% for l in ctflevels %}
+
+{% set nets %}
+{%  for n in range(l.networks) %}
+{%   set br %}
+{%    if loop.first %}
+{{     l.level }}
+{%-   else -%}
+{{     l.level }}_{{ n }}
+{%-   endif -%}
+{%   endset -%}
+{{' '}}--net=br{{ br }}
+{%- endfor%}
+{% endset -%}
+
+sniff{{ l.level }}:{{ nets }} --profile=ctf-sniff --shell=/bin/bash
+{% endfor%}
+
+sniff*:--net=none --private --shell=/bin/bash

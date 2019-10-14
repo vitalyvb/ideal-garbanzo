@@ -1,0 +1,133 @@
+---
+
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - firejail
+    - tcpdump
+    - bridge-utils
+
+- name: Create group
+  group:
+    name: csniff
+    state: present
+
+
+- name: Create group
+  group:
+    name: ctcpdump
+    state: present
+
+
+- name: Add users
+  user:
+    name: "{{ item.name }}"
+    shell: /usr/bin/firejail
+    password: "{{ item.password | password_hash('sha512', ctfusers_pw_salt) }}"
+    groups: csniff,ctcpdump
+  loop: "{{ ctfusers }}"
+
+- name: Add sbin to user path
+  copy:
+    src: etc/profile.d/setpath.sh
+    dest: /etc/profile.d/setpath.sh
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Disable MOTD
+  copy:
+    src: etc/motd
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Disable MOTD
+  file:
+    path: /etc/update-motd.d/
+    state: directory
+    recurse: yes
+    mode: "-x"
+
+
+- name: Set group perms on tcpdump
+  file:
+    path: /usr/sbin/tcpdump
+    owner: root
+    group: ctcpdump
+    mode: "0710"
+  tags: x
+
+- name: Set cap_net_raw=ep on tcpdump
+  capabilities:
+    path: /usr/sbin/tcpdump
+    capability: cap_net_raw=ep
+    state: present
+  tags: x
+
+
+- name: Copy firejail configuration
+  copy:
+    src: "etc/firejail/{{ item }}"
+    dest: "/etc/firejail/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "firejail.config"
+    - "ctf-sniff.profile"
+  tags: x
+
+- name: Copy firejail configuration
+  template:
+    src: "etc/firejail/{{ item }}.j2"
+    dest: "/etc/firejail/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "login.users"
+  tags: x
+
+
+- name: Configure AppAarmor
+  copy:
+    src: "etc/apparmor.d/{{ item }}"
+    dest: "/etc/apparmor.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "usr.sbin.tcpdump"
+  register: apparmorcfg
+
+- name: Restart AppArmor
+  become: true
+  service:
+    name: apparmor
+    state: restarted
+  when: apparmorcfg.changed
+
+
+- name: Configure network
+  template:
+    src: "etc/network/interfaces.d/{{ item }}.j2"
+    dest: "/etc/network/interfaces.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "br"
+  register: netcfg
+
+- name: Restart networking
+  become: true
+  service:
+    name: networking
+    state: restarted
+  when: netcfg.changed
+
+...

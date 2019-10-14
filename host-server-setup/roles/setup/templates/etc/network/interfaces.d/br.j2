@@ -1,0 +1,17 @@
+{% for l in ctflevels %}
+{% for n in range(l.networks) %}
+{% set br %}
+{%   if loop.first %}
+{{     l.level }}
+{%-  else -%}
+{{     l.level }}_{{ n }}
+{%-  endif -%}
+{% endset -%}
+
+auto br{{ br }}
+iface br{{ br }} inet static
+        address 172.21.{{ l.level * 10 + n }}.1/24
+        bridge_ports none
+        post-up sysctl -w net.ipv6.conf.br{{ br }}.disable_ipv6=1
+{% endfor%}
+{% endfor%}

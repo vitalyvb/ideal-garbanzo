@@ -1,0 +1,30 @@
+---
+# Default is to log in as root
+#ansible_user: root
+#remote_user: root
+
+ctfusers_pw_salt: "3vJ6Hxn6"
+
+ctfusers:
+    - name: "sniff1"
+      password: "sniff1"
+
+    - name: "sniff2"
+      password: "sniff2"
+
+    - name: "sniff3"
+      password: "sniff3"
+
+ctflevels:
+    - level: 1
+      networks: 1
+    - level: 2
+      networks: 2
+    - level: 3
+      networks: 2
+    - level: 4
+      networks: 2
+    - level: 5
+      networks: 2
+
+...

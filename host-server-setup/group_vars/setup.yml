@@ -1,0 +1,15 @@
+---
+
+ctfusers_pw_salt: "3vJ6Hxn6"
+
+ctfusers:
+    - name: "sniff1"
+      password: "sniff1"
+
+    - name: "sniff2"
+      password: "sniff2"
+
+    - name: "sniff3"
+      password: "sniff3"
+
+...
