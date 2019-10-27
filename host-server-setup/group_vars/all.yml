@@ -4,27 +4,30 @@
 #remote_user: root
 
 ctfusers_pw_salt: "3vJ6Hxn6"
-
-ctfusers:
-    - name: "sniff1"
-      password: "sniff1"
-
-    - name: "sniff2"
-      password: "sniff2"
-
-    - name: "sniff3"
-      password: "sniff3"
+ctfusers_login_prefix: "snoopy"
 
 ctflevels:
     - level: 1
       networks: 1
+      password: "snoopy1"
     - level: 2
       networks: 2
+      password: "snoopy2"
     - level: 3
       networks: 2
+      password: "snoopy3"
     - level: 4
       networks: 2
+      password: "snoopy4"
     - level: 5
       networks: 2
+      password: "snoopy5"
+    - level: 6
+      networks: 0
+      password: "snoopy6"
+      last: true
+
+ctfpackage_name: "traffic_servers"
+ctfpackage_version: "1.0.0"
 
 ...

@@ -1,0 +1,31 @@
+{% set nets %}
+{%  for n in range(item.networks) %}
+{%   set br %}
+{%    if loop.first %}
+{{     item.level }}
+{%-   else -%}
+{{     item.level }}_{{ n }}
+{%-   endif -%}
+{%    if not loop.last %}
+,
+{%-   endif -%}
+{%   endset -%}
+br{{ br }}
+{%- endfor%}
+{% endset -%}
+
+{% set nextp %}
+-n /etc/{{ ctfusers_login_prefix }}_pass/{{ ctfusers_login_prefix }}{{ item.level + 1 }}
+{%- endset -%}
+
+[Unit]
+Description=CTF level
+Requires=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/ctfsrv {{ nextp }} -i {{ nets }} level{{ '%02d'|format(item.level|int) }}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

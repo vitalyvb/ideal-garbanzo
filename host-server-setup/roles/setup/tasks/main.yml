@@ -8,6 +8,8 @@
     - firejail
     - tcpdump
     - bridge-utils
+    - python3-pip
+    - python3-scapy
 
 - name: Create group
   group:
@@ -23,11 +25,11 @@
 
 - name: Add users
   user:
-    name: "{{ item.name }}"
+    name: "{{ ctfusers_login_prefix }}{{ item.level }}"
     shell: /usr/bin/firejail
     password: "{{ item.password | password_hash('sha512', ctfusers_pw_salt) }}"
     groups: csniff,ctcpdump
-  loop: "{{ ctfusers }}"
+  loop: "{{ ctflevels }}"
 
 - name: Add sbin to user path
   copy:
@@ -36,6 +38,20 @@
     owner: root
     group: root
     mode: "0644"
+
+- name: Prepare password directory
+  file:
+    path: "/etc/{{ ctfusers_login_prefix }}_pass"
+    state: directory
+
+- name: Prepare passwords
+  template:
+    src: "passwords.j2"
+    dest: "/etc/{{ ctfusers_login_prefix }}_pass/{{ ctfusers_login_prefix }}{{ item.level }}"
+    owner: root
+    group: "{{ ctfusers_login_prefix }}{{ item.level }}"
+    mode: "0440"
+  loop: "{{ ctflevels }}"
 
 - name: Disable MOTD
   copy:
@@ -129,5 +145,58 @@
     name: networking
     state: restarted
   when: netcfg.changed
+
+
+- name: Copy server code
+  copy:
+    src: "../traffic-servers/dist/{{ item }}"
+    dest: "/tmp/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "{{ ctfpackage_name }}-{{ ctfpackage_version }}.tar.gz"
+  register: srvcode
+  tags: server
+
+- name: Install server code
+  become: true
+  pip:
+    name: "file:///tmp/{{ ctfpackage_name }}-{{ ctfpackage_version }}.tar.gz"
+    executable: pip3
+    state: forcereinstall
+  when: srvcode.changed
+  tags: server
+
+- name: Install systemctl daemons
+  template:
+    src: "etc/systemd/system/level-service.j2"
+    dest: "/etc/systemd/system/ctf{{ item.level }}.service"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ ctflevels }}"
+  when: not (item.last | default(false))
+  register: systemdcodedaemons
+  tags: server
+
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  when: systemdcodedaemons.changed
+  tags: server
+
+
+- name: Enable and start ctf services
+  systemd:
+    name: "ctf{{ item.level }}.service"
+    state: started
+    enabled: yes
+  loop: "{{ ctflevels }}"
+  when:
+    - not (item.last | default(false))
+    - systemdcodedaemons.changed
+  tags: server
 
 ...

@@ -2,6 +2,17 @@
 
 import argparse
 import logging
+import importlib
+
+
+class Env:
+    def __init__(self, args):
+        self._args = args
+        self.params = args.parameters
+        self.verbose = args.verbose
+        self.interfaces = args.interfaces.split(",")
+        self.interface = self.interfaces[0]
+        self.nextpass = open(args.nextpwfile, "r").read(1024).strip()
 
 
 def setup_logging(args):
@@ -13,7 +24,7 @@ def setup_logging(args):
 
 
 def list_runners():
-    import levels
+    from . import levels
 
     for m in levels._submodules:
         print(m)
@@ -24,12 +35,12 @@ def runner(args):
         return list_runners()
 
     try:
-        gen = __import__("levels.{}".format(args.generator), globals=globals(), fromlist=(args.generator,))
+        gen = importlib.import_module(".levels.{}".format(args.generator), __package__)
     except ModuleNotFoundError:
         logging.error("Generator '{}' not found, use 'list' to list available generators.".format(args.generator))
         return
 
-    return gen.run(args)
+    return gen.run(Env(args))
 
 
 def main():
@@ -38,7 +49,9 @@ def main():
 
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                         action="count", default=0)
-    parser.add_argument("-i", "--interface", help="set a working interface",
+    parser.add_argument("-i", "--interfaces", help="set working interfaces",
+                        required=True)
+    parser.add_argument("-n", "--nextpwfile", help="file with the password for the next level",
                         required=True)
     parser.add_argument("generator", help="generator name to run")
 
