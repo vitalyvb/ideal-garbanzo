@@ -5,6 +5,7 @@
     name: "{{ packages }}"
   vars:
     packages:
+    - nftables
     - firejail
     - tcpdump
     - bridge-utils
@@ -83,6 +84,27 @@
     capability: cap_net_raw=ep
     state: present
   tags: x
+
+
+- name: Copy nftables configuration
+  copy:
+    src: "etc/{{ item }}"
+    dest: "/etc/{{ item }}"
+    owner: root
+    group: root
+    mode: "0750"
+  with_items:
+    - "nftables.conf"
+  register: nftables
+  tags: nftables
+
+- name: Reload nftables
+  become: true
+  service:
+    name: nftables.service
+    state: restarted
+  when: nftables.changed
+  tags: nftables
 
 
 - name: Copy firejail configuration
