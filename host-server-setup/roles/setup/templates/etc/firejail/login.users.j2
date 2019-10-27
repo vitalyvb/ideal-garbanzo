@@ -15,7 +15,7 @@
 {%- endfor%}
 {% endset -%}
 
-sniff{{ l.level }}:{{ nets }} --profile=ctf-sniff --shell=/bin/bash
+{{ ctfusers_login_prefix }}{{ l.level }}:{{ nets }} --profile=ctf-sniff --shell=/bin/bash
 {% endfor%}
 
-sniff*:--net=none --private --shell=/bin/bash
+{{ ctfusers_login_prefix }}*:--net=none --private --shell=/bin/bash

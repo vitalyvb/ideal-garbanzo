@@ -146,6 +146,24 @@
     state: restarted
   when: netcfg.changed
 
+- name: Configure sysctl
+  copy:
+    src: "etc/sysctl.d/{{ item }}"
+    dest: "/etc/sysctl.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "less-ipv6.conf"
+  register: sysctlcfg
+
+- name: Reload sysctl
+  become: true
+  service:
+    name: systemd-sysctl.service
+    state: restarted
+  when: sysctlcfg.changed
+
 
 - name: Copy server code
   copy:
