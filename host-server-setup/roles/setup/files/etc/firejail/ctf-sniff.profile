@@ -43,6 +43,16 @@ dns 127.0.0.1
 #shell none
 
 blacklist /var/tmp
+blacklist /run/dbus
+blacklist /run/log
+blacklist /run/lvm
+blacklist /run/network
+blacklist /run/tmpfiles.d
+blacklist /run/udev
+blacklist /run/systemd
+blacklist /run/initctl
+blacklist /run/dmeventd-client
+blacklist /run/dmeventd-server
 
 # disable-mnt
 # private
