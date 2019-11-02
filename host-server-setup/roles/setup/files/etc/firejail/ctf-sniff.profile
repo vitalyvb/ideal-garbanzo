@@ -42,6 +42,8 @@ dns 127.0.0.1
 
 #shell none
 
+blacklist /var/tmp
+
 # disable-mnt
 # private
 # private-bin program
@@ -49,7 +51,7 @@ dns 127.0.0.1
 private-dev
 # private-etc none
 # private-lib
-private-tmp
+# private-tmp
 
 # memory-deny-write-execute
 # noexec ${HOME}

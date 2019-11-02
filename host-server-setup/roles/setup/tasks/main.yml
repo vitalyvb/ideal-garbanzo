@@ -260,6 +260,14 @@
   tags: server
 
 
+- name: Set perms on /tmp
+  file:
+    path: /tmp
+    owner: root
+    group: root
+    mode: "01773"
+
+
 - name: Prepare home directories perms
   file:
     path: "/home/{{ ctfusers_login_prefix }}{{ item.level }}"
