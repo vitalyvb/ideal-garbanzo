@@ -8,7 +8,7 @@
 
 -=[ Playing the game ]=-
 
-    * USERNAMES are snoopy1, snoopy2, ...
+    * USERNAMES are snoopy0, snoopy1, ...
     * Data files are stored in /snoopy/.
     * PASSWORDS for each level are stored in /etc/snoopy_pass/.
 

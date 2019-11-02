@@ -28,7 +28,7 @@ ctflevels:
             traffic carry enormous power... Power to raise curiosity, of course.
             Let's see what secrets lie ahead. Shall we?
 
-            Now, run tcpdump and see what happens.
+            Now, run tcpdump (without sudo) and see what happens.
     - level: 1
       networks: 1
       password: "snoopy1"
