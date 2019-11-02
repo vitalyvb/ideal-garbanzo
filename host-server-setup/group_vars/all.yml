@@ -10,11 +10,25 @@ ctflevels:
     - level: 1
       networks: 1
       password: "snoopy1"
-      login_message: |
-            asdf
-                fasf
-            fdfdfdfdf
-            fd df df sf sdf
+      login_message: |4
+
+            Welcome to the first level!
+
+            Remember to review the "tcpdump" man page. Syntax for filter expressions
+            can be found in the "pcap-filter" man page, it'll come handy soon.
+
+            The objective is to find a password for the next level (snoopy2). You
+            need to capture the password from the network traffic. Often there will
+            be a lot of different traffic on the wire and only correct subset of
+            the traffic need to captured. The level's story describes what kind of
+            traffic needs to captured to unlock the password for the next level.
+
+            Backstory for this game is this. You're a hacker, and, as a hacker,
+            you've always been curious. Tools that unveil and analyze network
+            traffic carry enormous power... Power to raise curiosity, of course.
+            Let's see what secrets lie ahead. Shall we?
+
+            Now, run tcpdump and see what happens.
     - level: 2
       networks: 2
       password: "snoopy2"

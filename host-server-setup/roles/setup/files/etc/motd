@@ -1,0 +1,35 @@
+-=[ Welcome to Snoopy game! ]=-
+
+  This game will teach the basics of traffic capture and traffic
+  analysis in Linux with tcpdump.
+
+  If you find any problems, please report them to
+  https://github.com/vitalyvb/ideal-garbanzo/issues
+
+-=[ Playing the game ]=-
+
+    * USERNAMES are snoopy1, snoopy2, ...
+    * Data files are stored in /snoopy/.
+    * PASSWORDS for each level are stored in /etc/snoopy_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to /tmp/ is disabled and /proc/ is
+  limited so that users can not snoop on eachother.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+  Please play nice:
+
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS!
+      This includes writeups of your solution on your blog or website!
+
+  Enjoy!
+
+-=[ Level information ]=-
