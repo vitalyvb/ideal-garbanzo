@@ -72,6 +72,35 @@
     mode: "-x"
 
 
+- name: Set issue.net
+  copy:
+    src: etc/issue.net
+    dest: /etc/issue.net
+    owner: root
+    group: root
+    mode: "0644"
+  tags: sshd
+
+- name: Configure ssh
+  copy:
+    src: etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: "0644"
+  register: sshd
+  tags: sshd
+
+- name: Reload sshd
+  become: true
+  service:
+    name: sshd.service
+    state: restarted
+    enabled: yes
+  when: sshd.changed
+  tags: sshd
+
+
 - name: Set group perms on tcpdump
   file:
     path: /usr/sbin/tcpdump
