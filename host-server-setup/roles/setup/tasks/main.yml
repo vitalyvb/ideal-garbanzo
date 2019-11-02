@@ -259,4 +259,49 @@
     - systemdcodedaemons.changed or srvcode.changed
   tags: server
 
+
+- name: Prepare home directories perms
+  file:
+    path: "/home/{{ ctfusers_login_prefix }}{{ item.level }}"
+    state: directory
+    owner: root
+    group: "{{ ctfusers_login_prefix }}{{ item.level }}"
+    mode: "0550"
+  loop: "{{ ctflevels }}"
+  tags: homes
+
+- name: Prepare home directories bashrc
+  template:
+    src: "home/bashrc.j2"
+    dest: "/home/{{ ctfusers_login_prefix }}{{ item.level }}/.bashrc"
+    owner: root
+    group: "{{ ctfusers_login_prefix }}{{ item.level }}"
+    mode: "0440"
+  loop: "{{ ctflevels }}"
+  tags: homes
+
+- name: Prepare home directories profile
+  template:
+    src: "home/profile.j2"
+    dest: "/home/{{ ctfusers_login_prefix }}{{ item.level }}/.profile"
+    owner: root
+    group: "{{ ctfusers_login_prefix }}{{ item.level }}"
+    mode: "0440"
+  loop: "{{ ctflevels }}"
+  tags: homes
+
+- name: Prepare home directories cleanup
+  file:
+    path: "/home/{{ ctfusers_login_prefix }}{{ item[0].level }}/{{ item[1] }}"
+    state: absent
+  loop: "{{ ctflevels | product(files) | list }}"
+  vars:
+    files:
+      - .bash_history
+      - .bash_logout
+      - .gnupg
+      - .ssh
+  tags: homes
+
+
 ...

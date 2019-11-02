@@ -10,22 +10,32 @@ ctflevels:
     - level: 1
       networks: 1
       password: "snoopy1"
+      login_message: |
+            asdf
+                fasf
+            fdfdfdfdf
+            fd df df sf sdf
     - level: 2
       networks: 2
       password: "snoopy2"
+      login_message: ""
     - level: 3
       networks: 2
       password: "snoopy3"
+      login_message: ""
     - level: 4
       networks: 2
       password: "snoopy4"
+      login_message: ""
     - level: 5
       networks: 2
       password: "snoopy5"
+      login_message: ""
     - level: 6
       networks: 0
       password: "snoopy6"
       last: true
+      login_message: ""
 
 ctfpackage_name: "traffic_servers"
 ctfpackage_version: "1.0.0"

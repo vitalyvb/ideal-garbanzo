@@ -43,7 +43,7 @@ dns 127.0.0.1
 #shell none
 
 # disable-mnt
-private
+# private
 # private-bin program
 # private-cache
 private-dev
