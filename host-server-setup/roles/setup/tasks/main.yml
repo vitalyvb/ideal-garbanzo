@@ -11,6 +11,8 @@
     - bridge-utils
     - python3-pip
     - python3-scapy
+    - auditd
+    - audispd-plugins
 
 - name: Create group
   group:
@@ -76,14 +78,12 @@
     owner: root
     group: ctcpdump
     mode: "0710"
-  tags: x
 
 - name: Set cap_net_raw=ep on tcpdump
   capabilities:
     path: /usr/sbin/tcpdump
     capability: cap_net_raw=ep
     state: present
-  tags: x
 
 
 - name: Copy nftables configuration
@@ -107,6 +107,28 @@
   tags: nftables
 
 
+- name: Copy audit configuration
+  copy:
+    src: "etc/audit/rules.d/{{ item }}"
+    dest: "/etc/audit/rules.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0600"
+  with_items:
+    - "audit-exec.rules"
+  register: auditch
+  tags: audit
+
+- name: Reload audit
+  become: true
+  service:
+    name: auditd.service
+    state: restarted
+    enabled: yes
+  when: auditch.changed
+  tags: audit
+
+
 - name: Copy firejail configuration
   copy:
     src: "etc/firejail/{{ item }}"
@@ -117,7 +139,6 @@
   with_items:
     - "firejail.config"
     - "ctf-sniff.profile"
-  tags: x
 
 - name: Copy firejail configuration
   template:
@@ -128,7 +149,6 @@
     mode: "0644"
   with_items:
     - "login.users"
-  tags: x
 
 
 - name: Configure AppAarmor
@@ -231,12 +251,12 @@
 - name: Enable and start ctf services
   systemd:
     name: "ctf{{ item.level }}.service"
-    state: started
+    state: restarted
     enabled: yes
   loop: "{{ ctflevels }}"
   when:
     - not (item.last | default(false))
-    - systemdcodedaemons.changed
+    - systemdcodedaemons.changed or srvcode.changed
   tags: server
 
 ...
