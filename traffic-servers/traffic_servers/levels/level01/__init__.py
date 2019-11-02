@@ -10,6 +10,9 @@ def run(env):
 
     pkt = Ether()/IP(dst="1.2.3.4",ttl=64)/UDP(sport=53)/DNS(rd=1, qd=DNSQR(qname='password is ' + env.nextpass + ' '))
 
+    # no rx
+    sock = L2Socket(iface=conf.iface, filter="proto 254", promisc=False)
+
     while True:
-        sendp(pkt)
+        sock.send(pkt)
         time.sleep(1)
