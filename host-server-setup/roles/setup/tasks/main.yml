@@ -119,6 +119,17 @@
     state: present
 
 
+- name: Copy scripts
+  copy:
+    src: "usr/local/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - "slowbuf.py"
+
+
 - name: Copy nftables configuration
   copy:
     src: "etc/{{ item }}"

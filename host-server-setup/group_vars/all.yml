@@ -7,17 +7,17 @@ ctfusers_pw_salt: "3vJ6Hxn6"
 ctfusers_login_prefix: "snoopy"
 
 ctflevels:
-    - level: 1
+    - level: 0
       networks: 1
-      password: "snoopy1"
+      password: "snoopy0"
       login_message: |4
 
-            Welcome to the first level!
+            Welcome!
 
             Remember to review the "tcpdump" man page. Syntax for filter expressions
             can be found in the "pcap-filter" man page, it'll come handy soon.
 
-            The objective is to find a password for the next level (snoopy2). You
+            The objective is to find a password for the next level (snoopy1). You
             need to capture the password from the network traffic. Often there will
             be a lot of different traffic on the wire and only correct subset of
             the traffic need to captured. The level's story describes what kind of
@@ -29,6 +29,22 @@ ctflevels:
             Let's see what secrets lie ahead. Shall we?
 
             Now, run tcpdump and see what happens.
+    - level: 1
+      networks: 1
+      password: "snoopy1"
+      login_message: |4
+
+            From: Security@acme.corp
+            To: undisclosed-recipients;
+            Subject: Protocols upgrade
+
+            Company-wide notice:
+
+            We're upgrading protocols so that password were not revealed by simply
+            running a tcpdump command. For compatibility, passwords are passed as
+            before as packet contents.
+
+            Regards
     - level: 2
       networks: 2
       password: "snoopy2"
