@@ -25,5 +25,11 @@ setuptools.setup(
         'console_scripts': [
             'ctfsrv=traffic_servers:ctfsrv.main',
         ],
-    }
+    },
+    setup_requires=[
+        'pytest-runner', 'pytest-flake8',
+    ],
+    tests_require=[
+        'pytest', 'flake8',
+    ],
 )
