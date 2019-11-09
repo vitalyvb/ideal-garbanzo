@@ -1,17 +1,33 @@
 #!python3
 
 import asyncio
-import unittest
 from scapy.all import Ether, IP, UDP, conf, L2Socket
+from ...util.rnd import Rnd, FakeFlows
+
+
+def generator(flow):
+    return Ether() / IP(dst=flow.dip, src=flow.sip, ttl=64) / UDP(sport=flow.sp, dport=flow.dp) / (' ' + flow.pwd)
 
 
 async def run_fake(env, sock):
-    pass
+    rnd = Rnd(env)
+    flows = FakeFlows(rnd, generator, count=10)
+
+    while True:
+        flow = flows.get_random()
+        sock.send(flow.get_data())
+        await asyncio.sleep(1.0 / len(flows))
 
 
 async def run_real(env, sock):
-    pkt_verbose = Ether() / IP(dst="1.2.3.4", ttl=64) / UDP(sport=5554, dport=5553) / ('Next level password is ' + env.nextpass + ' ')
-    pkt_silent = Ether() / IP(dst="1.2.3.4", ttl=64) / UDP(sport=5554, dport=5553) / env.nextpass
+    rnd = Rnd(env)
+
+    dst = rnd.random_ip()
+    p1 = rnd.random_port()
+    p2 = rnd.random_port()
+
+    pkt_verbose = Ether() / IP(dst=dst, ttl=64) / UDP(sport=p1, dport=p2) / ('Next level password is ' + env.nextpass + ' ')
+    pkt_silent = Ether() / IP(dst=dst, ttl=64) / UDP(sport=p1, dport=p2) / (' ' + env.nextpass)
 
     i = 0
     while True:

@@ -34,9 +34,12 @@ def runner(args):
     if args.generator == "list":
         return list_runners()
 
+    name = ".levels.{}".format(args.generator)
     try:
-        gen = importlib.import_module(".levels.{}".format(args.generator), __package__)
-    except ModuleNotFoundError:
+        gen = importlib.import_module(name, __package__)
+    except ModuleNotFoundError as e:
+        if e.name != name:
+            raise
         logging.error("Generator '{}' not found, use 'list' to list available generators.".format(args.generator))
         return
 
