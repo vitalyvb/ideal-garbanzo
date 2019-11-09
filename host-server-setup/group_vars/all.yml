@@ -48,15 +48,45 @@ ctflevels:
     - level: 2
       networks: 2
       password: "snoopy2"
-      login_message: ""
+      login_message: |4
+
+            From: Alistair.Silva@acme.corp
+            To: Maya.Montes@acme.corp
+            Subject: Re: Server installation
+
+            Hi Maya, as requested by Mr. Knox, I hooked up your new server to two
+            networks that you're requested. Our usual control path network is
+            connected to the second port, is that correct?
+
+            Curious what's another secret project you're working on again so you
+            need so much traffic...
+
+            Alistair
     - level: 3
       networks: 2
       password: "snoopy3"
-      login_message: ""
+      login_message: |4
+
+            From: IT@acme.corp
+            To: undisclosed-recipients;
+            Subject: Planned Router upgrade
+
+            Hi, please note, we plan to install new router this Saturday as a first
+            step of our infrastructure upgrade. Please let us know if you'll
+            encounter something unexpected on Monday, like connection issues,
+            or, especially, unexpected traffic on a control network.
+
+            Also note, authentication server address will not be changed this time,
+            so you can safely connect to the same IP address if you need to authenticate.
+
+            Jack
+
     - level: 4
       networks: 2
       password: "snoopy4"
-      login_message: ""
+      login_message: |4
+
+            You win!
     - level: 5
       networks: 2
       password: "snoopy5"

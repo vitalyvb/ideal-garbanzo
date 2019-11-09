@@ -5,6 +5,9 @@ from scapy.all import Ether, IP, UDP, conf, L2Socket
 from ...util.rnd import Rnd, FakeFlows
 
 
+AUTH_SERVER_ADDR = "172.31.5.12"
+
+
 def generator(flow):
     return Ether() / IP(dst=flow.dip, src=flow.sip, ttl=64) / UDP(sport=flow.sp, dport=flow.dp) / (' ' + flow.pwd)
 
@@ -22,7 +25,7 @@ async def run_fake(env, sock):
 async def run_real(env, sock):
     rnd = Rnd(env)
 
-    dst = rnd.random_ip()
+    dst = AUTH_SERVER_ADDR
     p1 = rnd.random_port()
     p2 = rnd.random_port()
 
