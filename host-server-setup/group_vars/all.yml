@@ -82,20 +82,53 @@ ctflevels:
             Jack
 
     - level: 4
-      networks: 2
+      networks: 1
       password: "snoopy4"
       login_message: |4
 
-            You win!
+            To: Alistair.Silva@acme.corp
+            From: Marigold.Lightfoot@acme.corp
+            Subject: Re: Your server
+
+            Hi, I've started this month at the company and was given this project...
+            Frank said you could help with this issue. I've found a documentation that
+            says that port for the authentication server is 5682, but it's not working.
+            Can you help?
+
+            To: Marigold.Lightfoot@acme.corp
+            From: Alistair.Silva@acme.corp
+            Subject: Re: Your server
+
+            No, it's 6236.
+
+            Alistair
+
     - level: 5
-      networks: 2
+      networks: 1
       password: "snoopy5"
-      login_message: ""
+      login_message: |4
+
+            From: Security@acme.corp
+            To: undisclosed-recipients;
+            Subject: Auth protocols upgrade
+
+            Company announcement.
+
+            Security is the top priority for out company. We're continuing to
+            improve security protocols. Please see description below.
+
+            To prevent simple traffic sniffing attacks, authentication server
+            port number is generated dynamically from the range 5200-5700.
+
+            Also, after upgrade suthentication subnet is 172.31.7.0/24
+
     - level: 6
       networks: 0
       password: "snoopy6"
       last: true
-      login_message: ""
+      login_message: |4
+
+            You win!
 
 ctfpackage_name: "traffic_servers"
 ctfpackage_version: "1.0.0"
