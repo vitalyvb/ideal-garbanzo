@@ -1,0 +1,6 @@
+---
+- hosts: ctfhosts
+  gather_facts: false
+  roles:
+    - test
+...

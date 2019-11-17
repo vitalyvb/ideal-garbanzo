@@ -1,0 +1,21 @@
+---
+
+- name: Check success
+  shell: |
+    ip link del dummyz
+    ip link add name dummyz type dummy
+    set -e
+    ip link set up dev dummyz
+    brctl addif br{{ interf }} dummyz
+    timeout 15s tcpdump -i br{{ interf }} -c 3 {{ item[0].check_with }} | grep -m1 {{ item[1].password }}
+  vars:
+    interf: "{{ item[0].level }}{{ item[0].check_with_interf | default('') }}"
+  loop: "{{ ctflevels | zip(ctflevels[1:]) | list }}"
+  loop_control:
+    label: "{{ ctfusers_login_prefix }}{{ item[0].level }}"
+
+- name: Cleanup
+  shell: |
+    ip link del dummyz
+
+...

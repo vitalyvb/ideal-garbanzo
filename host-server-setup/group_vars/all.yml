@@ -10,6 +10,8 @@ ctflevels:
     - level: 0
       networks: 1
       password: "snoopy0"
+      check_with: ""
+      check_with_interf: null
       login_message: |4
 
             Welcome!
@@ -32,6 +34,8 @@ ctflevels:
     - level: 1
       networks: 1
       password: "snoopy1"
+      check_with: "-A"
+      check_with_interf: null
       login_message: |4
 
             From: Security@acme.corp
@@ -48,6 +52,8 @@ ctflevels:
     - level: 2
       networks: 2
       password: "snoopy2"
+      check_with: "-A"
+      check_with_interf: "_1"
       login_message: |4
 
             From: Alistair.Silva@acme.corp
@@ -65,6 +71,8 @@ ctflevels:
     - level: 3
       networks: 2
       password: "snoopy3"
+      check_with: "-A host 172.31.5.12"
+      check_with_interf: "_1"
       login_message: |4
 
             From: IT@acme.corp
@@ -84,6 +92,8 @@ ctflevels:
     - level: 4
       networks: 1
       password: "snoopy4"
+      check_with: "-A port 6236"
+      check_with_interf: null
       login_message: |4
 
             To: Alistair.Silva@acme.corp
@@ -106,6 +116,8 @@ ctflevels:
     - level: 5
       networks: 1
       password: "snoopy5"
+      check_with: "-A net 172.31.7.0/24 and portrange 5200-5700"
+      check_with_interf: null
       login_message: |4
 
             From: Security@acme.corp
