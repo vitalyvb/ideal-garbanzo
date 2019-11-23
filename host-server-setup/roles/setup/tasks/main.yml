@@ -315,6 +315,16 @@
     group: root
     mode: "01773"
 
+- name: Set perms on /tmp permanently
+  copy:
+    src: "etc/tmpfiles.d/{{ item }}"
+    dest: "/etc/tmpfiles.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "tmp.conf"
+
 
 - name: Prepare home directories perms
   file:
