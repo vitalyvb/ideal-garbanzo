@@ -13,6 +13,15 @@
     - python3-scapy
     - auditd
     - audispd-plugins
+    - apt-transport-https
+    - wget
+    - unattended-upgrades
+
+
+- name: Upgrade all packages to the latest version
+  command: "apt-get -qq upgrade"
+  changed_when: False
+
 
 - name: Create group
   group:
@@ -377,5 +386,33 @@
       - .ssh
   tags: homes
 
+
+- name: Configure Unattended Updates
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: "{{ item.line }}"
+    line: "{{ item.new }}"
+  loop:
+#    - { line: '^(//)?      "o=Debian(,a=stable)?"', new: '      "o=Debian"'}
+    - { line: '^(//)?Unattended-Upgrade::MinimalSteps ".*";', new: 'Unattended-Upgrade::MinimalSteps "true";'}
+    - { line: '^(//)?Unattended-Upgrade::Remove-Unused-Dependencies ".*";', new: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'}
+    - { line: '^(//)?Unattended-Upgrade::Automatic-Reboot ".*";', new: 'Unattended-Upgrade::Automatic-Reboot "true";'}
+    - { line: '^(//)?Unattended-Upgrade::Automatic-Reboot-WithUsers ".*";', new: 'Unattended-Upgrade::Automatic-Reboot-WithUsers "true";'}
+  register: unattended_config
+
+- name: Restart Unattended Upgrades
+  systemd:
+    name: unattended-upgrades
+    state: restarted
+  when: unattended_config.changed
+
+- name: Check if reboot is required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+
+- name: Reboot for any important updates
+  reboot:
+  when: reboot_required.stat.exists
 
 ...
